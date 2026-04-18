@@ -1,0 +1,5 @@
+token github.txt
+.env
+secrets*
+.terraform/
+terraform.tfstate*
