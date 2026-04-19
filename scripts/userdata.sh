@@ -25,11 +25,11 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-User=root
+User=ec2-root
 WorkingDirectory=/home/ec2-user/app-repo/app
 ExecStart=/usr/bin/python3 /home/ec2-user/app-repo/app/app.py
 Restart=always
-RestartSec=5
+RestartSec=20
 Environment=PYTHONUNBUFFERED=1
 
 [Install]
