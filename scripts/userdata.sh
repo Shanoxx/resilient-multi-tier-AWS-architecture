@@ -25,7 +25,7 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-User=ec2-root
+User=root
 WorkingDirectory=/home/ec2-user/app-repo/app
 ExecStart=/usr/bin/python3 /home/ec2-user/app-repo/app/app.py
 Restart=always
