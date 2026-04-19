@@ -15,7 +15,7 @@ git clone https://github.com/Shanoxx/resilient-multi-tier-AWS-architecture.git a
 
 # Install Python packages
 cd /home/ec2-user/app-repo/app
-pip3 install -r requirements.txt
+pip3 install --ignore-installed -r requirements.txt
 
 # Create systemd service
 cat > /etc/systemd/system/demoapp.service <<EOF
