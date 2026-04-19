@@ -1,15 +1,16 @@
 #!/bin/bash
-set -e
-exec > /var/log/user-data.log 2>&1
+set -xe
+exec > >(tee /var/log/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
 
 # Update system
-yum update -y
+dnf update -y
 
 # Install dependencies
-yum install -y git python3 python3-pip
+dnf install -y git python3 python3-pip
 
 # Clone repository
 cd /home/ec2-user
+rm -rf app-repo
 git clone https://github.com/Shanoxx/resilient-multi-tier-AWS-architecture.git app-repo
 
 # Install Python packages
@@ -20,7 +21,8 @@ pip3 install -r requirements.txt
 cat > /etc/systemd/system/demoapp.service <<EOF
 [Unit]
 Description=EC2 Demo Flask App
-After=network.target
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 User=root
@@ -34,9 +36,10 @@ Environment=PYTHONUNBUFFERED=1
 WantedBy=multi-user.target
 EOF
 
-# Start service
 systemctl daemon-reload
 systemctl enable demoapp
 systemctl start demoapp
+systemctl status demoapp --no-pager || true
+curl -v http://127.0.0.1:5000/health || true
 
 echo "=== User Data done. Flask app running on port 5000 ==="
